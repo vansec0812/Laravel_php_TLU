@@ -1,0 +1,722 @@
+<div class="app-container">
+  <!-- Mobile Toggle Header (Visible only on small screens) -->
+  <div class="sidebar-toggle-mobile" style="position: fixed; top: 16px; left: 16px; z-index: 1001;" (click)="toggleMobileSidebar()">
+    <i class="fa" [ngClass]="mobileSidebarActive() ? 'fa-times' : 'fa-bars'"></i>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.active]="mobileSidebarActive()">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo-icon">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div>
+        <h2 class="sidebar-brand-name">QL HỌC SINH - SV</h2>
+        <div class="sidebar-brand-sub">Kim Liên - Đống Đa</div>
+      </div>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li>
+        <button class="sidebar-item-btn" [class.active]="activeTab() === 'dashboard'" (click)="switchTab('dashboard')">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Tổng Quan</span>
+        </button>
+      </li>
+      <li>
+        <button class="sidebar-item-btn" [class.active]="activeTab() === 'students'" (click)="switchTab('students')">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span>Học Sinh - Sinh Viên</span>
+        </button>
+      </li>
+      <li>
+        <button class="sidebar-item-btn" [class.active]="activeTab() === 'todo'" (click)="switchTab('todo')">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Danh Sách Việc Cần Làm</span>
+        </button>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="avatar">CB</div>
+        <div class="user-info">
+          <span class="user-name">Cán Bộ Phường</span>
+          <span class="user-role">Quản lý Dân cư</span>
+        </div>
+      </div>
+      <button class="theme-toggle-btn" (click)="toggleTheme()" title="Thay đổi giao diện">
+        <i class="fa-solid" [ngClass]="theme() === 'dark' ? 'fa-sun' : 'fa-moon'"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-title-section">
+        @if (activeTab() === 'dashboard') {
+          <h1 class="animate-fade">Bảng Điều Khiển Tổng Quan</h1>
+          <p class="animate-fade">Thống kê dữ liệu quản lý cư trú học sinh, sinh viên phường Kim Liên</p>
+        }
+        @if (activeTab() === 'students') {
+          <h1 class="animate-fade">Hồ Sơ Học Sinh - Sinh Viên</h1>
+          <p class="animate-fade">Quản lý thông tin chi tiết, liên lạc và diện cư trú</p>
+        }
+        @if (activeTab() === 'todo') {
+          <h1 class="animate-fade">Danh Sách Việc Cần Làm (Todo)</h1>
+          <p class="animate-fade">Quản lý nhiệm vụ hỗ trợ, khảo sát và xác minh tạm trú</p>
+        }
+      </div>
+
+      <div class="current-date-badge">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>{{ currentDate() }}</span>
+      </div>
+    </header>
+
+    <!-- TAB 1: DASHBOARD -->
+    @if (activeTab() === 'dashboard') {
+      <div class="stats-grid animate-slide-up">
+        <!-- Card 1: Tổng số HS-SV -->
+        <div class="stat-card students-card" (click)="switchTab('students')">
+          <div class="stat-card-info">
+            <span class="stat-card-title">Tổng số HS-SV</span>
+            <span class="stat-card-value">{{ totalStudents() }}</span>
+            <span class="stat-card-subtext">
+              <i class="fa-solid fa-users"></i> trên địa bàn phường
+            </span>
+          </div>
+          <div class="stat-card-icon">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+        </div>
+
+        <!-- Card 2: Sinh viên Đại học -->
+        <div class="stat-card pupils-card" (click)="switchTab('students'); filterType.set('Sinh viên')">
+          <div class="stat-card-info">
+            <span class="stat-card-title">Sinh viên Đại học</span>
+            <span class="stat-card-value">{{ totalCollegeStudents() }}</span>
+            <span class="stat-card-subtext">
+              <i class="fa-solid fa-percent"></i> chiếm {{ collegePercentage() }}% tổng số
+            </span>
+          </div>
+          <div class="stat-card-icon">
+            <i class="fa-solid fa-university"></i>
+          </div>
+        </div>
+
+        <!-- Card 3: Thường trú / Tạm trú -->
+        <div class="stat-card residents-card" (click)="switchTab('students'); filterStatus.set('Tạm trú')">
+          <div class="stat-card-info">
+            <span class="stat-card-title">Số lượng Tạm Trú</span>
+            <span class="stat-card-value">{{ totalTemporary() }}</span>
+            <span class="stat-card-subtext">
+              <i class="fa-solid fa-home"></i> {{ totalPermanent() }} thường trú
+            </span>
+          </div>
+          <div class="stat-card-icon">
+            <i class="fa-solid fa-map-location-dot"></i>
+          </div>
+        </div>
+
+        <!-- Card 4: Nhiệm vụ Todo hoàn thành -->
+        <div class="stat-card tasks-card" (click)="switchTab('todo')">
+          <div class="stat-card-info">
+            <span class="stat-card-title">Tiến độ công việc</span>
+            <span class="stat-card-value">{{ completedPercentage() }}%</span>
+            <span class="stat-card-subtext">
+              <i class="fa-solid fa-check-circle"></i> Đã làm: {{ completedTasks() }}/{{ totalTasks() }} việc
+            </span>
+          </div>
+          <div class="stat-card-icon">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Layout Columns -->
+      <div class="dashboard-layout animate-slide-up" style="animation-delay: 0.1s;">
+        <!-- Left Column -->
+        <div class="dashboard-card">
+          <div class="dashboard-card-header">
+            <h3 class="dashboard-card-title">
+              <i class="fa-solid fa-user-clock"></i>
+              Mới Thêm Gần Đây
+            </h3>
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" (click)="switchTab('students')">
+              Xem tất cả
+            </button>
+          </div>
+
+          <div class="activity-list">
+            @for (student of recentStudents(); track student.id) {
+              <div class="activity-item">
+                <div class="activity-avatar" [style.background]="student.type === 'Sinh viên' ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' : 'linear-gradient(135deg, #10b981, #34d399)'" style="color: white;">
+                  {{ student.fullName.substring(0, 1) }}
+                </div>
+                <div class="activity-details">
+                  <div class="activity-title">{{ student.fullName }}</div>
+                  <div class="activity-desc">{{ student.school }} &bull; {{ student.code }}</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                  <span class="badge" [ngClass]="student.status === 'Thường trú' ? 'badge-permanent' : 'badge-temporary'">
+                    {{ student.status }}
+                  </span>
+                  <span class="activity-time">
+                    <i class="fa-solid fa-calendar" style="font-size: 10px; margin-right: 4px;"></i>{{ student.birthDate | date:'dd/MM/yyyy' }}
+                  </span>
+                </div>
+              </div>
+            } @empty {
+              <div class="empty-state" style="padding: 30px 0;">
+                <i class="fa-solid fa-users-slash empty-state-icon" style="font-size: 32px;"></i>
+                <div class="empty-state-title">Chưa có hồ sơ học sinh, sinh viên</div>
+              </div>
+            }
+          </div>
+
+          <!-- Quick Statistics and Proportions -->
+          <div class="dashboard-card-header" style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; border-bottom: none;">
+            <h3 class="dashboard-card-title" style="font-size: 16px;">
+              <i class="fa-solid fa-chart-line"></i>
+              Tỷ lệ Cư trú & Cấp bậc học tập
+            </h3>
+          </div>
+          
+          <div class="distribution-list">
+            <div class="distribution-item">
+              <div class="distribution-info">
+                <span class="distribution-name">Sinh Viên Cao Đẳng, Đại Học</span>
+                <span class="distribution-count">{{ totalCollegeStudents() }}/{{ totalStudents() }} học sinh-sinh viên ({{ collegePercentage() }}%)</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" [style.width.%]="collegePercentage()"></div>
+              </div>
+            </div>
+
+            <div class="distribution-item">
+              <div class="distribution-info">
+                <span class="distribution-name">Tạm Trú (Nhà trọ, chung cư mini,...)</span>
+                <span class="distribution-count">{{ totalTemporary() }}/{{ totalStudents() }} người ({{ temporaryPercentage() }}%)</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" [style.width.%]="temporaryPercentage()" style="background: linear-gradient(90deg, var(--warning), var(--danger));"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="dashboard-card">
+          <div class="dashboard-card-header">
+            <h3 class="dashboard-card-title">
+              <i class="fa-solid fa-graduation-cap"></i>
+              Nơi Học Tập Phổ Biến
+            </h3>
+          </div>
+
+          <div class="distribution-list">
+            @for (school of schoolStats(); track school.name) {
+              <div class="distribution-item">
+                <div class="distribution-info">
+                  <span class="distribution-name" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 180px;">{{ school.name }}</span>
+                  <span class="distribution-count">{{ school.count }} em ({{ school.percentage }}%)</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" [style.width.%]="school.percentage" [style.background]="school.percentage > 30 ? 'linear-gradient(90deg, #6366f1, #4f46e5)' : 'linear-gradient(90deg, #06b6d4, #0891b2)'"></div>
+                </div>
+              </div>
+            } @empty {
+              <div class="empty-state" style="padding: 30px 0;">
+                <i class="fa-solid fa-school-slash empty-state-icon" style="font-size: 32px;"></i>
+                <div class="empty-state-title">Chưa có thông tin trường học</div>
+              </div>
+            }
+          </div>
+
+          <!-- Shortcuts & Export Options -->
+          <div class="dashboard-card-header" style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; border-bottom: none;">
+            <h3 class="dashboard-card-title" style="font-size: 15px;">
+              <i class="fa-solid fa-file-export"></i>
+              Xuất dữ liệu & Báo cáo
+            </h3>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button class="btn btn-secondary" style="width: 100%; justify-content: center;" (click)="exportToCSV()">
+              <i class="fa-solid fa-file-excel" style="color: var(--success);"></i>
+              Xuất Danh Sách Excel (CSV)
+            </button>
+            <button class="btn btn-secondary" style="width: 100%; justify-content: center;" (click)="exportToJSON()">
+              <i class="fa-solid fa-file-code" style="color: var(--info);"></i>
+              Xuất Báo Cáo Phường (JSON)
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- TAB 2: STUDENTS CRUD -->
+    @if (activeTab() === 'students') {
+      <div class="view-container animate-slide-up">
+        <!-- Control Bar -->
+        <div class="control-bar">
+          <div class="search-filter-group">
+            <div class="search-input-wrapper">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" class="search-input" placeholder="Tìm kiếm theo Tên, Mã số, Trường, Ngõ..." 
+                     [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)">
+            </div>
+            
+            <select class="select-filter" [ngModel]="filterType()" (ngModelChange)="filterType.set($event)">
+              <option value="all">Phân loại (Tất cả)</option>
+              <option value="Sinh viên">Sinh viên</option>
+              <option value="Học sinh">Học sinh</option>
+            </select>
+
+            <select class="select-filter" [ngModel]="filterStatus()" (ngModelChange)="filterStatus.set($event)">
+              <option value="all">Cư trú (Tất cả)</option>
+              <option value="Thường trú">Thường trú</option>
+              <option value="Tạm trú">Tạm trú</option>
+            </select>
+
+            <select class="select-filter" [ngModel]="filterGender()" (ngModelChange)="filterGender.set($event)">
+              <option value="all">Giới tính (Tất cả)</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-secondary" style="padding: 12px 14px;" (click)="exportToCSV()" title="Xuất dữ liệu Excel">
+              <i class="fa-solid fa-file-excel"></i>
+            </button>
+            <button class="btn btn-primary" (click)="openAddStudentModal()">
+              <i class="fa-solid fa-plus"></i>
+              Thêm Mới
+            </button>
+          </div>
+        </div>
+
+        <!-- Data Table (Desktop) -->
+        <div class="table-responsive" style="display: block;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mã HS-SV</th>
+                <th>Họ và Tên</th>
+                <th>Giới Tính</th>
+                <th>Phân Loại</th>
+                <th>Nơi Học Tập (Trường)</th>
+                <th>Diện Cư Trú</th>
+                <th>Địa Chỉ (Kim Liên)</th>
+                <th>Liên Hệ</th>
+                <th style="text-align: center;">Hành Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (student of filteredStudents(); track student.id) {
+                <tr>
+                  <td style="font-weight: 700; color: var(--primary);">{{ student.code }}</td>
+                  <td>
+                    <div style="font-weight: 600;">{{ student.fullName }}</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Sinh ngày: {{ student.birthDate | date:'dd/MM/yyyy' }}</div>
+                  </td>
+                  <td>{{ student.gender }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="student.type === 'Sinh viên' ? 'badge-student' : 'badge-pupil'">
+                      {{ student.type }}
+                    </span>
+                  </td>
+                  <td>{{ student.school }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="student.status === 'Thường trú' ? 'badge-permanent' : 'badge-temporary'">
+                      {{ student.status }}
+                    </span>
+                  </td>
+                  <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" [title]="student.address">
+                    {{ student.address }}
+                  </td>
+                  <td>
+                    <div style="font-size: 13px;"><i class="fa-solid fa-phone" style="font-size: 10px; color: var(--text-muted); margin-right: 6px;"></i>{{ student.phone }}</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">{{ student.email }}</div>
+                  </td>
+                  <td>
+                    <div class="actions-cell" style="justify-content: center;">
+                      <button class="btn-icon btn-icon-primary" (click)="openEditStudentModal(student)" title="Chỉnh sửa">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </button>
+                      <button class="btn-icon btn-icon-danger" (click)="requestDeleteStudent(student)" title="Xóa">
+                        <i class="fa-solid fa-trash-can"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="9" style="text-align: center; padding: 40px 0;">
+                    <div class="empty-state">
+                      <i class="fa-solid fa-users-slash empty-state-icon"></i>
+                      <div class="empty-state-title">Không tìm thấy học sinh - sinh viên nào</div>
+                      <div class="empty-state-desc">Hãy thử thay đổi điều kiện tìm kiếm hoặc thêm mới hồ sơ.</div>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- TAB 3: TODO LIST -->
+    @if (activeTab() === 'todo') {
+      <div class="view-container animate-slide-up">
+        <!-- Control Bar -->
+        <div class="control-bar">
+          <div class="search-filter-group">
+            <!-- Filter Options for completed/active -->
+            <div style="display: flex; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background-color: var(--bg-hover);">
+              <button class="btn" style="padding: 10px 16px; border-radius: 0; border: none;"
+                      [class.btn-primary]="todoFilter() === 'all'" [class.btn-secondary]="todoFilter() !== 'all'"
+                      (click)="todoFilter.set('all')">
+                Tất Cả ({{ totalTasks() }})
+              </button>
+              <button class="btn" style="padding: 10px 16px; border-radius: 0; border: none; border-left: 1px solid var(--border); border-right: 1px solid var(--border);"
+                      [class.btn-primary]="todoFilter() === 'active'" [class.btn-secondary]="todoFilter() !== 'active'"
+                      (click)="todoFilter.set('active')">
+                Chưa Xong ({{ totalTasks() - completedTasks() }})
+              </button>
+              <button class="btn" style="padding: 10px 16px; border-radius: 0; border: none;"
+                      [class.btn-primary]="todoFilter() === 'completed'" [class.btn-secondary]="todoFilter() !== 'completed'"
+                      (click)="todoFilter.set('completed')">
+                Đã Xong ({{ completedTasks() }})
+              </button>
+            </div>
+
+            <!-- Filter Category -->
+            <select class="select-filter" [ngModel]="todoCategoryFilter()" (ngModelChange)="todoCategoryFilter.set($event)">
+              <option value="all">Danh mục (Tất cả)</option>
+              <option value="Xác minh">Xác minh</option>
+              <option value="Hỗ trợ">Hỗ trợ</option>
+              <option value="Khảo sát">Khảo sát</option>
+              <option value="Kiểm tra">Kiểm tra</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" (click)="openAddTaskModal()">
+            <i class="fa-solid fa-plus"></i>
+            Thêm Việc Cần Làm
+          </button>
+        </div>
+
+        <!-- Progress Tracker Info -->
+        <div style="background-color: var(--bg-hover); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+          <div style="flex-grow: 1;">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 6px;">
+              <span>Tiến độ hoàn thành nhiệm vụ quản lý</span>
+              <span>{{ completedTasks() }}/{{ totalTasks() }} Công việc ({{ completedPercentage() }}%)</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar" [style.width.%]="completedPercentage()" style="background: linear-gradient(90deg, var(--success), var(--primary));"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Todo Tasks Grid -->
+        <div class="todo-grid">
+          @for (task of filteredTasks(); track task.id) {
+            <div class="todo-card" [class.completed]="task.completed">
+              <div class="todo-header">
+                <div class="todo-checkbox-wrapper">
+                  <input type="checkbox" class="todo-checkbox" [checked]="task.completed" (change)="toggleTaskCompleted(task)">
+                  <div>
+                    <h4 class="todo-title">{{ task.title }}</h4>
+                    <span class="todo-category-badge" style="margin-top: 6px; display: inline-block;">
+                      {{ task.category }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="actions-cell">
+                  <button class="btn-icon btn-icon-primary" style="width: 28px; height: 28px; font-size: 11px;" (click)="openEditTaskModal(task)" title="Sửa công việc">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button class="btn-icon btn-icon-danger" style="width: 28px; height: 28px; font-size: 11px;" (click)="requestDeleteTask(task)" title="Xóa">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="todo-meta">
+                <div class="todo-meta-item">
+                  <i class="fa-solid fa-user-graduate"></i>
+                  <span style="font-weight: 500;">Liên kết: {{ getStudentName(task.studentId) }}</span>
+                </div>
+                
+                <div class="todo-meta-item">
+                  <i class="fa-solid fa-hourglass-half"></i>
+                  <span>Hạn chót: <strong [style.color]="task.completed ? 'var(--text-muted)' : 'var(--danger)'">{{ task.dueDate | date:'dd/MM/yyyy' }}</strong></span>
+                </div>
+              </div>
+
+              <div class="todo-footer">
+                <span class="badge" [ngClass]="{
+                  'badge-priority-high': task.priority === 'Cao',
+                  'badge-priority-medium': task.priority === 'Trung bình',
+                  'badge-priority-low': task.priority === 'Thấp'
+                }">
+                  Mức độ: {{ task.priority }}
+                </span>
+                
+                @if (task.completed) {
+                  <span style="color: var(--success); font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 4px;">
+                    <i class="fa-solid fa-circle-check"></i> Hoàn thành
+                  </span>
+                } @else {
+                  <span style="color: var(--warning); font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 4px;">
+                    <i class="fa-solid fa-clock"></i> Đang chờ xử lý
+                  </span>
+                }
+              </div>
+            </div>
+          } @empty {
+            <div class="empty-state" style="grid-column: 1 / -1; min-height: 250px;">
+              <i class="fa-solid fa-check-double empty-state-icon"></i>
+              <div class="empty-state-title">Tuyệt vời! Không có công việc nào cần xử lý</div>
+              <div class="empty-state-desc">Tất cả các công việc đã được hoàn tất hoặc không phù hợp bộ lọc.</div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </main>
+</div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- Modal 1: Student Add/Edit Modal -->
+<div class="modal-overlay" [class.active]="isStudentModalOpen()">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>
+        <i class="fa-solid fa-user-graduate"></i>
+        {{ currentEditingStudent() ? 'Chỉnh sửa thông tin học sinh - sinh viên' : 'Thêm mới học sinh - sinh viên' }}
+      </h3>
+      <button class="modal-close-btn" (click)="closeStudentModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <form class="form-grid" (ngSubmit)="saveStudent()">
+        <div class="form-group">
+          <label class="form-label">Mã số HS-SV <span class="required">*</span></label>
+          <input type="text" class="form-control" placeholder="Ví dụ: SV202401" name="code" [(ngModel)]="studentForm.code" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Họ và tên <span class="required">*</span></label>
+          <input type="text" class="form-control" placeholder="Nhập đầy đủ họ tên" name="fullName" [(ngModel)]="studentForm.fullName" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ngày sinh</label>
+          <input type="date" class="form-control" name="birthDate" [(ngModel)]="studentForm.birthDate">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Giới tính</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="gender" value="Nam" [(ngModel)]="studentForm.gender">
+              <span>Nam</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="gender" value="Nữ" [(ngModel)]="studentForm.gender">
+              <span>Nữ</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="gender" value="Khác" [(ngModel)]="studentForm.gender">
+              <span>Khác</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phân loại học tập</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="type" value="Sinh viên" [(ngModel)]="studentForm.type">
+              <span>Sinh viên (ĐH/CĐ)</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="type" value="Học sinh" [(ngModel)]="studentForm.type">
+              <span>Học sinh (PTTH/THCS)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Cư trú tại Phường</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="status" value="Thường trú" [(ngModel)]="studentForm.status">
+              <span>Thường trú</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="status" value="Tạm trú" [(ngModel)]="studentForm.status">
+              <span>Tạm trú</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group form-group-full">
+          <label class="form-label">Nơi Học Tập (Trường học) <span class="required">*</span></label>
+          <input type="text" class="form-control" placeholder="Ví dụ: Đại học Bách Khoa Hà Nội, THPT Kim Liên..." name="school" [(ngModel)]="studentForm.school" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Số điện thoại</label>
+          <input type="text" class="form-control" placeholder="Nhập số điện thoại" name="phone" [(ngModel)]="studentForm.phone">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email liên hệ</label>
+          <input type="email" class="form-control" placeholder="email@vi-du.com" name="email" [(ngModel)]="studentForm.email">
+        </div>
+
+        <div class="form-group form-group-full">
+          <label class="form-label">Địa chỉ chi tiết ở Phường Kim Liên <span class="required">*</span></label>
+          <textarea class="form-control" placeholder="Ví dụ: Phòng 302, Tập thể C1 Kim Liên hoặc Số 15, Ngách 26/10 Chùa Bộc..." name="address" [(ngModel)]="studentForm.address" required></textarea>
+        </div>
+      </form>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeStudentModal()">Hủy Bỏ</button>
+      <button class="btn btn-primary" (click)="saveStudent()">Lưu Lại</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: Todo Task Add/Edit Modal -->
+<div class="modal-overlay" [class.active]="isTodoModalOpen()">
+  <div class="modal-card" style="max-width: 500px;">
+    <div class="modal-header">
+      <h3>
+        <i class="fa-solid fa-list-check"></i>
+        {{ currentEditingTask() ? 'Chỉnh sửa việc cần làm' : 'Thêm việc cần làm mới' }}
+      </h3>
+      <button class="modal-close-btn" (click)="closeTodoModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="form-group">
+          <label class="form-label">Tên công việc <span class="required">*</span></label>
+          <input type="text" class="form-control" placeholder="Ví dụ: Xác minh cư trú, Phát học bổng..." name="title" [(ngModel)]="todoForm.title" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Liên kết học sinh - sinh viên (Nếu có)</label>
+          <select class="form-control" name="studentId" [(ngModel)]="todoForm.studentId">
+            <option value="">Không có liên kết (Công việc chung)</option>
+            @for (student of students(); track student.id) {
+              <option [value]="student.id">{{ student.fullName }} ({{ student.code }} - {{ student.type }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Danh mục nhiệm vụ</label>
+          <select class="form-control" name="category" [(ngModel)]="todoForm.category">
+            <option value="Xác minh">Xác minh</option>
+            <option value="Hỗ trợ">Hỗ trợ</option>
+            <option value="Khảo sát">Khảo sát</option>
+            <option value="Kiểm tra">Kiểm tra</option>
+            <option value="Khác">Khác</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mức độ ưu tiên</label>
+          <select class="form-control" name="priority" [(ngModel)]="todoForm.priority">
+            <option value="Cao">Cao</option>
+            <option value="Trung bình">Trung bình</option>
+            <option value="Thấp">Thấp</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Hạn hoàn thành <span class="required">*</span></label>
+          <input type="date" class="form-control" name="dueDate" [(ngModel)]="todoForm.dueDate" required>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeTodoModal()">Hủy Bỏ</button>
+      <button class="btn btn-primary" (click)="saveTask()">Lưu Lại</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 3: Delete Confirmation Modal -->
+<div class="modal-overlay" [class.active]="isDeleteConfirmModalOpen()">
+  <div class="modal-card" style="max-width: 400px;">
+    <div class="modal-header" style="background-color: var(--danger-light); border-bottom-color: var(--danger-light);">
+      <h3 style="color: var(--danger);">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        Xác Nhận Xóa Dữ Liệu
+      </h3>
+      <button class="modal-close-btn" (click)="closeDeleteConfirmModal()">
+        <i class="fa-solid fa-xmark" style="color: var(--danger);"></i>
+      </button>
+    </div>
+
+    <div class="modal-body" style="text-align: center; padding: 30px 24px;">
+      <i class="fa-solid fa-trash-can" style="font-size: 48px; color: var(--danger); margin-bottom: 16px; display: inline-block;"></i>
+      <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Bạn có chắc chắn muốn xóa?</h4>
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+        Hành động này sẽ xóa vĩnh viễn <strong>"{{ nameToDelete() }}"</strong> ra khỏi cơ sở dữ liệu. Không thể hoàn tác hành động này!
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeDeleteConfirmModal()">Hủy Bỏ</button>
+      <button class="btn btn-danger" (click)="confirmDelete()">Đồng Ý Xóa</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= TOAST NOTIFICATIONS ================= -->
+<div class="toast-container">
+  @for (toast of toasts(); track toast.id) {
+    <div class="toast" [ngClass]="{
+      'toast-success': toast.type === 'success',
+      'toast-danger': toast.type === 'danger',
+      'toast-warning': toast.type === 'warning'
+    }">
+      <div class="toast-icon">
+        <i class="fa-solid" [ngClass]="{
+          'fa-circle-check': toast.type === 'success',
+          'fa-circle-exclamation': toast.type === 'danger',
+          'fa-triangle-exclamation': toast.type === 'warning'
+        }"></i>
+      </div>
+      <div class="toast-content">
+        <div class="toast-title">{{ toast.title }}</div>
+        <div class="toast-message">{{ toast.message }}</div>
+      </div>
+      <button class="toast-close" (click)="removeToast(toast.id)">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  }
+</div>
