@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let autoplayInterval = null;
     let isAutoplayActive = false;
     let autoplayDuration = 8000; // 8 seconds per slide in autoplay
-    
+
     // Touch swipe support
     let touchStartX = 0;
     let touchEndX = 0;
-    
+
     // Teleprompter state
     let noteFontSize = 16; // default 16px for Times Roman readability
     let isAutoscrollActive = false;
@@ -113,12 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const progressBar = document.getElementById('progress-bar');
-    
+
     const playPauseBtn = document.getElementById('play-pause-btn');
     const themeToggleBtn = document.getElementById('theme-toggle');
     const fullscreenToggleBtn = document.getElementById('fullscreen-toggle');
     const speakerModeToggleBtn = document.getElementById('speaker-mode-toggle');
-    
+
     // Notes panel
     const speakerNotesPanel = document.getElementById('speaker-notes-panel');
     const notesTextContainer = document.getElementById('speaker-notes-text');
@@ -176,10 +176,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Toggle background images
+        // Toggle background images + re-trigger label animation
         imageWrappers.forEach((wrapper, index) => {
             if (index === currentSlide) {
                 wrapper.classList.add('active');
+                // Re-trigger label slide-up animation on each slide change
+                const label = wrapper.querySelector('.image-label');
+                if (label) {
+                    label.style.animation = 'none';
+                    label.offsetHeight; // force reflow
+                    label.style.animation = '';
+                }
             } else {
                 wrapper.classList.remove('active');
             }
@@ -245,12 +252,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!hint && remaining > 0) {
             hint = document.createElement('span');
             hint.className = 'reveal-hint';
-            hint.textContent = '▶ click để tiếp tục';
+            hint.textContent = '';
             slideEl.appendChild(hint);
         }
         if (hint) {
             hint.classList.toggle('hidden', remaining === 0);
-            hint.textContent = remaining > 0 ? `▶ click để tiếp tục (${remaining})` : '';
+            hint.textContent = remaining > 0 ? `` : '';
         }
     }
 
@@ -322,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupTouchNavigation() {
         const presentation = document.querySelector('.presentation-container');
         if (!presentation) return;
-        
+
         presentation.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
         }, false);
@@ -385,30 +392,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('particles');
         if (!container) return;
         const particleCount = 15;
-        
+
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
             particle.classList.add('particle');
-            
+
             // Random styling for variation
             const size = Math.random() * 15 + 4; // 4px to 19px
             const left = Math.random() * 100;
             const delay = Math.random() * 8;
             const duration = Math.random() * 6 + 6;
-            
+
             particle.style.width = `${size}px`;
             particle.style.height = `${size}px`;
             particle.style.left = `${left}%`;
             particle.style.animationDelay = `${delay}s`;
             particle.style.animationDuration = `${duration}s`;
-            
+
             // Gold or Red gradient mix to match colors
             if (Math.random() > 0.5) {
                 particle.style.background = 'radial-gradient(circle, rgba(255,222,0,0.6) 0%, rgba(255,222,0,0) 70%)';
             } else {
                 particle.style.background = 'radial-gradient(circle, rgba(218,37,29,0.4) 0%, rgba(218,37,29,0) 70%)';
             }
-            
+
             container.appendChild(particle);
         }
     }
@@ -417,29 +424,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // COUNTER NUMBERS ANIMATION
     // ==========================================================================
     let hasAnimatedCounter = false;
-    
+
     function animateNumberCounter() {
         const counterEl = document.querySelector('.counter');
         if (!counterEl || hasAnimatedCounter) return;
-        
+
         hasAnimatedCounter = true; // Run only once
         const targetVal = parseInt(counterEl.getAttribute('data-target'));
         const duration = 2000;
         const frameRate = 60;
         const totalFrames = Math.round(duration / (1000 / frameRate));
-        
+
         let currentFrame = 0;
-        
+
         const timer = setInterval(() => {
             currentFrame++;
-            
+
             const progress = currentFrame / totalFrames;
             const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-            
+
             const currentVal = Math.round(easeOutCubic * targetVal);
-            
+
             counterEl.textContent = formatVietnameseNumber(currentVal) + '+';
-            
+
             if (currentFrame >= totalFrames) {
                 clearInterval(timer);
                 counterEl.textContent = '8.000.000.000+';
@@ -457,9 +464,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateSpeakerNotes() {
         const noteData = speakerNotes[currentSlide];
         if (!noteData) return;
-        
+
         if (notesSlideNum) notesSlideNum.textContent = currentSlide; // 0-based for student index
-        
+
         if (notesTextContainer) {
             notesTextContainer.innerHTML = `
                 <div class="highlight-speech-note">
@@ -474,14 +481,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleSpeakerMode() {
         if (!speakerNotesPanel) return;
         speakerNotesPanel.classList.toggle('open');
-        
+
         if (speakerModeToggleBtn) {
             speakerModeToggleBtn.classList.toggle('active');
         }
-        
+
         const isOpen = speakerNotesPanel.classList.contains('open');
         localStorage.setItem('speakerNotesOpen', isOpen);
-        
+
         if (!isOpen) {
             stopAutoscroll();
         }
@@ -506,12 +513,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function startAutoscroll() {
         isAutoscrollActive = true;
         if (autoscrollToggleBtn) autoscrollToggleBtn.classList.add('active');
-        
+
         autoscrollInterval = setInterval(() => {
             const el = notesTextContainer;
             if (!el) return;
             const isAtBottom = el.scrollHeight - el.clientHeight <= el.scrollTop + 1;
-            
+
             if (isAtBottom) {
                 el.scrollTop = 0;
             } else {
@@ -531,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!speakerNotesPanel) return;
         const savedOpen = localStorage.getItem('speakerNotesOpen');
         const savedSize = localStorage.getItem('notesFontSize');
-        
+
         // Default to open for speech convenience
         if (savedOpen === 'false') {
             speakerNotesPanel.classList.remove('open');
@@ -540,7 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
             speakerNotesPanel.classList.add('open');
             if (speakerModeToggleBtn) speakerModeToggleBtn.classList.add('active');
         }
-        
+
         if (savedSize && notesTextContainer) {
             noteFontSize = parseInt(savedSize);
             notesTextContainer.style.fontSize = `${noteFontSize}px`;
@@ -554,7 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
         runConsoleBtn.addEventListener('click', () => {
             const body = document.querySelector('.console-body');
             if (!body || runConsoleBtn.classList.contains('running')) return;
-            
+
             runConsoleBtn.classList.add('running');
             runConsoleBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang chạy...';
 
@@ -564,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 appendConsoleLog(body, '>>> Initializing hardware modules... [OK]', 'rgba(255,255,255,0.5)');
             }, 600);
-            
+
             setTimeout(() => {
                 appendConsoleLog(body, '>>> Booting system core: "Vietnamese Culture OS" v8.0... [OK]', 'rgba(255,255,255,0.5)');
             }, 1200);
@@ -579,7 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(() => {
                 appendConsoleLog(body, '>>> SUCCESS: "Việt Nam Hùng Cường" - Hệ thống vận hành hoàn hảo!', '#34d399');
-                
+
                 runConsoleBtn.classList.remove('running');
                 runConsoleBtn.innerHTML = '<i class="fa-solid fa-check"></i> Chạy lại';
             }, 3000);
@@ -592,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logLine.style.color = color;
         logLine.textContent = text;
         parent.appendChild(logLine);
-        
+
         const consoleContainer = document.querySelector('.interactive-console');
         if (consoleContainer) consoleContainer.scrollTop = consoleContainer.scrollHeight;
     }
@@ -603,15 +610,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function initOverviewGrid() {
         if (!overviewGrid) return;
         overviewGrid.innerHTML = '';
-        
+
         speakerNotes.forEach((slideData, idx) => {
             const card = document.createElement('div');
             card.classList.add('slide-card');
             if (idx === currentSlide) card.classList.add('active');
-            
+
             const imgEl = imageWrappers[idx]?.querySelector('img');
             const imgPath = imgEl ? imgEl.getAttribute('src') : '';
-            
+
             card.innerHTML = `
                 <div class="card-preview">
                     <img src="${imgPath}" alt="${slideData.title}">
@@ -622,12 +629,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Nhấp vào để nhảy đến slide</p>
                 </div>
             `;
-            
+
             card.addEventListener('click', () => {
                 goToSlide(idx);
                 closeOverviewModal();
             });
-            
+
             overviewGrid.appendChild(card);
         });
     }
@@ -642,7 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.classList.remove('active');
             }
         });
-        
+
         overviewModal.classList.add('open');
         stopAutoplay();
     }
@@ -671,13 +678,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Navigation Buttons (null-safe)
         if (prevBtn) prevBtn.addEventListener('click', prevSlide);
         if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-        
+
         // Keyboard mapping
         document.addEventListener('keydown', handleKeyDown);
-        
+
         // Auto play (null-safe)
         if (playPauseBtn) playPauseBtn.addEventListener('click', toggleAutoplay);
-        
+
         // Theme toggling (removed from header, null-safe)
         if (themeToggleBtn) {
             themeToggleBtn.addEventListener('click', () => {
@@ -685,10 +692,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.classList.toggle('dark-theme');
             });
         }
-        
+
         // Fullscreen toggling (null-safe)
         if (fullscreenToggleBtn) fullscreenToggleBtn.addEventListener('click', toggleFullscreen);
-        
+
         // Speaker notes controls (null-safe)
         if (speakerModeToggleBtn) speakerModeToggleBtn.addEventListener('click', toggleSpeakerMode);
         if (closeNotesBtn) closeNotesBtn.addEventListener('click', toggleSpeakerMode);
@@ -696,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (fontDecreaseBtn) fontDecreaseBtn.addEventListener('click', () => changeFontSize(-1));
         if (autoscrollToggleBtn) autoscrollToggleBtn.addEventListener('click', toggleAutoscroll);
         loadSpeakerNotesPrefs();
-        
+
         // Overview grid modal (null-safe)
         if (overviewBtn) overviewBtn.addEventListener('click', openOverviewModal);
         if (closeOverviewModalBtn) closeOverviewModalBtn.addEventListener('click', closeOverviewModal);
