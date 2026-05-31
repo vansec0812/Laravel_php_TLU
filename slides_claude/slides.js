@@ -147,6 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setupEventListeners();
         setupTouchNavigation();
         initOverviewGrid();
+
+        // Reveal all items on the initial slide immediately
+        revealAll(slides[currentSlide]);
     }
 
     // ==========================================================================
@@ -220,45 +223,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // SLIDE NAVIGATION LOGIC
     // ==========================================================================
-    // ==========================================================================
-    // CLICK-TO-REVEAL (PowerPoint-style)
-    // ==========================================================================
-    function resetReveals(slideEl) {
+    // Reveal all items on a slide immediately (no click-to-reveal)
+    function revealAll(slideEl) {
         if (!slideEl) return;
         const items = slideEl.querySelectorAll('.reveal-item');
-        items.forEach(el => el.classList.remove('revealed'));
-        updateRevealHint(slideEl);
-        if (items.length > 0) {
-            slideEl.classList.add('has-reveals');
-            slideEl.classList.remove('all-revealed');
-        }
-    }
-
-    function revealNext(slideEl) {
-        if (!slideEl) return false;
-        const items = slideEl.querySelectorAll('.reveal-item:not(.revealed)');
-        if (items.length === 0) return false;
-        items[0].classList.add('revealed');
-        updateRevealHint(slideEl);
-        if (slideEl.querySelectorAll('.reveal-item:not(.revealed)').length === 0) {
-            slideEl.classList.add('all-revealed');
-        }
-        return true;
-    }
-
-    function updateRevealHint(slideEl) {
-        let hint = slideEl.querySelector('.reveal-hint');
-        const remaining = slideEl.querySelectorAll('.reveal-item:not(.revealed)').length;
-        if (!hint && remaining > 0) {
-            hint = document.createElement('span');
-            hint.className = 'reveal-hint';
-            hint.textContent = '';
-            slideEl.appendChild(hint);
-        }
-        if (hint) {
-            hint.classList.toggle('hidden', remaining === 0);
-            hint.textContent = remaining > 0 ? `` : '';
-        }
+        items.forEach(el => el.classList.add('revealed'));
     }
 
     function goToSlide(index) {
@@ -266,9 +235,9 @@ document.addEventListener('DOMContentLoaded', () => {
             currentSlide = index;
             updateSlideDisplay();
 
-            // Reset reveals for new slide
+            // Reveal all items immediately on slide change
             const activeSlide = slides[currentSlide];
-            resetReveals(activeSlide);
+            revealAll(activeSlide);
 
             // Auto scroll notes to top on slide change
             const panelContent = document.querySelector('.panel-content');
@@ -281,11 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function nextSlide() {
-        // First try to reveal next item on current slide
-        const activeSlide = slides[currentSlide];
-        if (activeSlide && revealNext(activeSlide)) return;
-
-        // All revealed (or no reveals) → advance slide
+        // Advance to next slide directly (no click-to-reveal)
         if (currentSlide < totalSlides - 1) {
             goToSlide(currentSlide + 1);
         } else {

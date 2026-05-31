@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    DESIGN SYSTEM & VARIABLES (BRIGHT RED/YELLOW THEME)
    ========================================================================== */
 :root {
@@ -558,42 +558,18 @@ body {
 }
 
 /* ==========================================================================
-   CLICK-TO-REVEAL ANIMATION (PowerPoint-style)
+   REVEAL ANIMATION (Items visible immediately, slide-up on enter)
    ========================================================================== */
 .reveal-item {
     opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-        transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-    pointer-events: none;
+    transform: translateY(14px);
+    transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .reveal-item.revealed {
     opacity: 1;
     transform: translateY(0);
-    pointer-events: auto;
-}
-
-/* Hint cursor on slides that have unrevealed items */
-.slide-content.has-reveals:not(.all-revealed) {
-    cursor: pointer;
-}
-
-/* Small indicator badge when there are items left to reveal */
-.reveal-hint {
-    position: absolute;
-    bottom: 6px;
-    right: 8px;
-    font-size: 11px;
-    color: var(--accent-red);
-    opacity: 0.6;
-    letter-spacing: 0.5px;
-    pointer-events: none;
-    transition: opacity 0.3s;
-}
-
-.reveal-hint.hidden {
-    opacity: 0;
 }
 
 .slide-header {
@@ -708,11 +684,21 @@ body {
 
 /* Typography styles inside slide */
 .slide-lead {
-    font-size: 21px;
+    font-size: 23px;
     line-height: 1.6;
     color: var(--text-main);
     margin-bottom: 20px;
     font-weight: normal;
+}
+
+/* Slide 5 intro paragraph — slightly smaller */
+.slide-lead.font-medium {
+    font-size: 21px;
+}
+
+/* Slide 1 lead paragraph — slightly smaller */
+[data-slide="1"] .slide-lead {
+    font-size: 19px;
 }
 
 .highlight-red {
@@ -732,6 +718,11 @@ body {
 .slide-content strong {
     color: var(--text-main);
     font-weight: 700;
+}
+
+/* Allow highlight-red to override strong's default black color */
+.slide-content strong.highlight-red {
+    color: var(--accent-red);
 }
 
 /* Intentionally red keywords - use sparingly */
@@ -849,7 +840,7 @@ body {
 }
 
 .stat-label {
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -868,7 +859,7 @@ body {
 }
 
 .question-box h3 {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
     line-height: 1.4;
 }
@@ -892,7 +883,7 @@ body {
     border: 1.5px solid var(--accent-red);
     padding: 6px 14px;
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--accent-red);
     display: flex;
@@ -960,7 +951,7 @@ body {
 }
 
 .concept-card h4 {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 700;
     letter-spacing: 1.5px;
     margin-bottom: 6px;
@@ -973,7 +964,7 @@ body {
 }
 
 .concept-card .desc {
-    font-size: 13px;
+    font-size: 16px;
     color: var(--text-muted);
     line-height: 1.4;
     display: block;
@@ -1125,12 +1116,13 @@ body {
 }
 
 .quote-card cite {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--text-main);
     display: block;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .stat-highlight-row {
@@ -1149,7 +1141,7 @@ body {
 
 .stat-num {
     font-weight: 800;
-    font-size: 18px;
+    font-size: 22px;
 }
 
 .stat-num.glow-red {
@@ -1157,7 +1149,7 @@ body {
 }
 
 .stat-lbl {
-    font-size: 14px;
+    font-size: 17px;
     color: var(--text-main);
     font-weight: 700;
 }
@@ -1173,7 +1165,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 16px;
+    font-size: 20px;
     line-height: 1.4;
 }
 
@@ -1234,13 +1226,13 @@ body {
 }
 
 .val-text strong {
-    font-size: 18px;
+    font-size: 21px;
     color: var(--accent-red);
     font-weight: 700;
 }
 
 .val-text span {
-    font-size: 14px;
+    font-size: 17px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1279,13 +1271,13 @@ body {
 }
 
 .threat-card h4 {
-    font-size: 16px;
+    font-size: 19px;
     font-weight: 700;
     color: var(--accent-red);
 }
 
 .threat-card p {
-    font-size: 13px;
+    font-size: 16px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1298,7 +1290,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--accent-red);
     font-weight: 700;
 }
@@ -1349,13 +1341,13 @@ body {
 }
 
 .showcase-text strong {
-    font-size: 16px;
+    font-size: 19px;
     color: var(--accent-red);
     font-weight: 700;
 }
 
 .showcase-text span {
-    font-size: 13px;
+    font-size: 16px;
     color: var(--text-main);
 }
 
@@ -1373,7 +1365,7 @@ body {
     border-radius: 2px;
     text-align: center;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 18px;
     color: var(--accent-red);
 }
 
@@ -1387,12 +1379,15 @@ body {
 }
 
 .solution-focus h3 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 1.4;
     margin-top: 6px;
     color: var(--text-main);
 }
+
+
+
 
 .solution-list {
     list-style: none;
@@ -1415,14 +1410,14 @@ body {
 }
 
 .solution-list li strong {
-    font-size: 16px;
+    font-size: 19px;
     color: var(--accent-red);
     display: block;
     margin-bottom: 2px;
 }
 
 .solution-list li span {
-    font-size: 14px;
+    font-size: 17px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1455,14 +1450,14 @@ body {
 }
 
 .action-card h5 {
-    font-size: 16px;
+    font-size: 19px;
     font-weight: 700;
     margin-bottom: 4px;
     color: var(--accent-red);
 }
 
 .action-card p {
-    font-size: 13px;
+    font-size: 16px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1496,14 +1491,14 @@ body {
 }
 
 .immune-pillar h5 {
-    font-size: 15px;
+    font-size: 19px;
     font-weight: 700;
     margin-bottom: 8px;
     color: var(--accent-red);
 }
 
 .immune-pillar p {
-    font-size: 13px;
+    font-size: 16px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1511,7 +1506,7 @@ body {
 .quote-border-left {
     border-left: 3px solid var(--accent-red);
     padding-left: 16px;
-    font-size: 15px;
+    font-size: 16px;
     font-style: italic;
     color: var(--text-muted);
 }
@@ -1549,7 +1544,7 @@ body {
 }
 
 .pledge-text {
-    font-size: 15px;
+    font-size: 18px;
     line-height: 1.5;
     color: var(--text-main);
     font-weight: 700;
