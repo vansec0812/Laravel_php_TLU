@@ -2112,3 +2112,15 @@ body {
         opacity: 1;
     }
 }
+
+/* Slide 8 Console Scaling Overrides */
+#slide8-console .console-body {
+    font-size: 18px;
+    line-height: 1.6;
+    padding: 24px;
+}
+
+#slide8-console .console-output {
+    font-size: 16px;
+    padding: 12px 24px;
+}
