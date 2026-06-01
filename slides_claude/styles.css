@@ -758,7 +758,7 @@ body {
 
 .intro-topic-badge {
     background-color: var(--accent-red);
-    color: var(--accent-gold);
+    color: #ffffff;
     border: 1px solid var(--accent-gold);
     padding: 6px 16px;
     border-radius: 4px;
