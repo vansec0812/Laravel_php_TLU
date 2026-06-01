@@ -103,7 +103,32 @@
             </div>
             <!-- Slide 7: Đại sứ văn hóa số -->
             <div class="image-wrapper" data-slide="7">
-                <img src="images/digital_ambassador.png" alt="Đại sứ văn hóa số" class="image-main">
+                <div class="console-container-left" style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 550px; z-index: 5;">
+                    <!-- Interactive Code Panel -->
+                    <div class="interactive-console" id="slide8-console" style="pointer-events: auto; width: 100%; position: relative;">
+                        <div class="console-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="console-title">digital_ambassador.py</span>
+                        </div>
+                        <div class="console-body font-mono" id="slide8-console-body" style="text-align: left;">
+                            <p class="line"><span class="keyword">def</span> <span
+                                    class="func">lan_toa_van_hoa</span>(sinh_vien, noi_dung):</p>
+                            <p class="line indent">post = sang_tao_noi_dung(noi_dung)</p>
+                            <p class="line indent"><span class="keyword">if</span> post.kiem_tra_ban_sac() == <span class="keyword">True</span>:</p>
+                            <p class="line indent2">post.chia_se_mang_xa_hoi()</p>
+                            <p class="line indent2">lan_toa_toan_cau(global_reach=<span class="keyword">True</span>)</p>
+                            <p class="line indent2"><span class="keyword">return</span> <span class="string">"Lan tỏa bản sắc Việt thành công!"</span></p>
+                            <p class="line indent"><span class="keyword">return</span> <span class="string">"Cần mang đậm dấu ấn Việt hơn"</span></p>
+                        </div>
+                        <button class="btn-console-run" id="run-console-btn-slide8"><svg viewBox="0 0 24 24" width="12"
+                                height="12" fill="currentColor"
+                                style="display:inline-block; vertical-align:middle; margin-right:4px;">
+                                <path d="M8 5v14l11-7z" />
+                            </svg> Chạy thử</button>
+                    </div>
+                </div>
                 <div class="overlay-vignette"></div>
                 <div class="image-label">
                     <span class="image-label-sub">GIẢI PHÁP 01</span>
@@ -275,31 +300,7 @@
                         </div>
                     </div>
 
-                    <!-- Interactive Code Panel -->
-                    <div class="interactive-console">
-                        <div class="console-header">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                            <span class="console-title">vietnam_system.py</span>
-                        </div>
-                        <div class="console-body font-mono">
-                            <p class="line"><span class="keyword">def</span> <span
-                                    class="func">chay_quoc_gia</span>(kinh_te, van_hoa):</p>
-                            <p class="line indent">hardware = nap_phan_cung(kinh_te)</p>
-                            <p class="line indent">os = khoi_dong_he_dieu_hanh(van_hoa)</p>
-                            <p class="line indent"><span class="keyword">if</span> os.is_corrupted():</p>
-                            <p class="line indent2"><span class="keyword">return</span> <span class="string">"Dân tộc
-                                    tan rã!"</span></p>
-                            <p class="line indent"><span class="keyword">return</span> <span class="string">"Việt Nam
-                                    Hùng Cường"</span></p>
-                        </div>
-                        <button class="btn-console-run" id="run-console-btn"><svg viewBox="0 0 24 24" width="12"
-                                height="12" fill="currentColor"
-                                style="display:inline-block; vertical-align:middle; margin-right:4px;">
-                                <path d="M8 5v14l11-7z" />
-                            </svg> Chạy thử</button>
-                    </div>
+
                 </div>
             </article>
 
@@ -485,7 +486,7 @@
                                         d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 6 15.5 6 14 6.67 14 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 6 8.5 6 7 6.67 7 7.5 7.67 9 8.5 9zm3.5 5c-2.33 0-4.3 1.45-5.12 3.5h10.24c-.82-2.05-2.79-3.5-5.12-3.5z" />
                                 </svg></div>
                             <div class="showcase-text">
-                                <strong><span class="nowrap">Vở kịch "Mưa đỏ"</span></strong>
+                                <strong><span class="nowrap">Bộ phim điện ảnh "Mưa đỏ"</span></strong>
                                 <span>Cảm xúc nghẹn ngào với câu hát: <span class="nowrap"><em>"Còn gì đẹp
                                             hơn..."</em></span></span>
                             </div>

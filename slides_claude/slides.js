@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let isAutoplayActive = false;
     let autoplayDuration = 8000; // 8 seconds per slide in autoplay
 
+    // State variable for slide 8 code simulator
+    let slide8CodeRunStatus = 'idle'; // 'idle', 'running'
+
     // Touch swipe support
     let touchStartX = 0;
     let touchEndX = 0;
@@ -44,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title: "Tư duy mã nguồn - Phần cứng & Hệ điều hành",
             text: `<p>Là một sinh viên Công nghệ thông tin tại Đại học Thủy lợi, khi nhìn nhận xã hội dưới tư duy của một nhà phát triển hệ thống, tôi thấy:</p>
                    <p>Nếu kinh tế là <strong>“phần cứng” (Hardware)</strong> tạo nên sức mạnh vật chất nền tảng, thì văn hóa chính là <strong>“hệ điều hành” (OS)</strong> quyết định cách thức vận hành, khí chất và tâm hồn của cả dân tộc.</p>`,
-            note: "Nhấn mạnh sự so sánh ví von Hardware & OS. Có thể hướng tay về phía bảng Console trên màn hình để minh họa."
+            note: "Nhấn mạnh sự so sánh ví von Hardware & OS bằng cử chỉ tay linh hoạt."
         },
         {
             title: "Chân lý Nguyễn Phú Trọng & Nghị quyết 80",
@@ -74,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title: "Giải pháp 1: Đại sứ văn hóa số",
             text: `<p>Để phát huy vai trò chủ thể của Nhân dân, giải pháp đầu tiên là xây dựng lực lượng <strong>“Đại sứ văn hóa số”</strong>.</p>
                    <p>Mỗi người dân, đặc biệt là học sinh sinh viên công nghệ, hãy chủ động sáng tạo nội dung, đưa lịch sử, ẩm thực, phong tục Việt Nam lên không gian số. Chiến dịch “Tự hào người Việt Nam” trực tuyến sẽ tạo làn sóng lan tỏa mạnh mẽ.</p>`,
-            note: "Giọng thuyết phục, mắt hướng tới khán giả để kêu gọi hành động chung tay làm Đại sứ văn hóa số."
+            note: "Giọng thuyết phục, kêu gọi hành động. Nhấn nút tiếp theo (Next) hoặc nhấp chuột để bắt đầu chạy mô phỏng mã nguồn đại sứ số trên màn hình."
         },
         {
             title: "Giải pháp 2: Kinh tế hóa văn hóa & Nghị quyết 80",
@@ -134,8 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeOverviewModalBtn = document.getElementById('close-overview-modal');
     const overviewGrid = document.getElementById('overview-grid');
 
-    // Interactive console on Slide 2
-    const runConsoleBtn = document.getElementById('run-console-btn');
+    // Interactive console on Slide 8
+    const runConsoleBtnSlide8 = document.getElementById('run-console-btn-slide8');
 
     // ==========================================================================
     // INITIALIZATION
@@ -233,6 +236,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function goToSlide(index) {
         if (index >= 0 && index < totalSlides) {
             currentSlide = index;
+
+            // Reset slide 8 console state if we go to Slide 8
+            if (currentSlide === 7) {
+                slide8CodeRunStatus = 'idle';
+                const runBtn = document.getElementById('run-console-btn-slide8');
+                const body = document.getElementById('slide8-console-body');
+                if (runBtn && body) {
+                    runBtn.classList.remove('running');
+                    runBtn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="display:inline-block; vertical-align:middle; margin-right:4px;"><path d="M8 5v14l11-7z" /></svg> Chạy thử';
+                    const prevOutput = body.querySelectorAll('.console-output');
+                    prevOutput.forEach(el => el.remove());
+                }
+            }
+
             updateSlideDisplay();
 
             // Reveal all items immediately on slide change
@@ -250,6 +267,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function nextSlide() {
+        // If we are on Slide 8 (0-indexed 7) and code console hasn't run yet
+        if (currentSlide === 7 && slide8CodeRunStatus === 'idle') {
+            runSlide8Console();
+            return;
+        }
+
         // Advance to next slide directly (no click-to-reveal)
         if (currentSlide < totalSlides - 1) {
             goToSlide(currentSlide + 1);
@@ -520,42 +543,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // INTERACTIVE CODE SIMULATOR (SLIDE 2)
     // ==========================================================================
-    if (runConsoleBtn) {
-        runConsoleBtn.addEventListener('click', () => {
-            const body = document.querySelector('.console-body');
-            if (!body || runConsoleBtn.classList.contains('running')) return;
+    // INTERACTIVE CODE SIMULATOR (SLIDE 8)
+    // ==========================================================================
+    function runSlide8Console() {
+        const runBtn = document.getElementById('run-console-btn-slide8');
+        const body = document.getElementById('slide8-console-body');
+        if (!body || !runBtn || runBtn.classList.contains('running')) return;
 
-            runConsoleBtn.classList.add('running');
-            runConsoleBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang chạy...';
+        slide8CodeRunStatus = 'running';
+        runBtn.classList.add('running');
+        runBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang chạy...';
 
-            const prevOutput = document.querySelectorAll('.console-output');
-            prevOutput.forEach(el => el.remove());
+        const prevOutput = body.querySelectorAll('.console-output');
+        prevOutput.forEach(el => el.remove());
 
-            setTimeout(() => {
-                appendConsoleLog(body, '>>> Initializing hardware modules... [OK]', 'rgba(255,255,255,0.5)');
-            }, 600);
+        setTimeout(() => {
+            appendConsoleLog(body, '>>> Khởi tạo đại sứ văn hóa số: Đinh Phương Ly... [OK]', 'rgba(255,255,255,0.5)');
+        }, 600);
 
-            setTimeout(() => {
-                appendConsoleLog(body, '>>> Booting system core: "Vietnamese Culture OS" v8.0... [OK]', 'rgba(255,255,255,0.5)');
-            }, 1200);
+        setTimeout(() => {
+            appendConsoleLog(body, '>>> Kiểm tra nội dung bài viết về lịch sử, ẩm thực... [ĐẠT YÊU CẦU]', '#ffde00');
+        }, 1200);
 
-            setTimeout(() => {
-                appendConsoleLog(body, '>>> Verifying integrity against Nghị quyết 80-NQ/TW...', '#ffde00');
-            }, 1800);
+        setTimeout(() => {
+            appendConsoleLog(body, '>>> Đang lan tỏa trên không gian mạng toàn cầu...', 'rgba(255,255,255,0.5)');
+        }, 1800);
 
-            setTimeout(() => {
-                appendConsoleLog(body, '>>> Sức mạnh nội sinh: 100% | Động lực phát triển: 100% ... [SECURE]', '#60a5fa');
-            }, 2400);
+        setTimeout(() => {
+            appendConsoleLog(body, '>>> Đạt 100.000+ lượt tiếp cận trên mạng xã hội... [SUCCESS]', '#60a5fa');
+        }, 2400);
 
-            setTimeout(() => {
-                appendConsoleLog(body, '>>> SUCCESS: "Việt Nam Hùng Cường" - Hệ thống vận hành hoàn hảo!', '#34d399');
-
-                runConsoleBtn.classList.remove('running');
-                runConsoleBtn.innerHTML = '<i class="fa-solid fa-check"></i> Chạy lại';
-            }, 3000);
-        });
+        setTimeout(() => {
+            appendConsoleLog(body, '>>> SUCCESS: "Lan tỏa bản sắc Việt!"', '#34d399');
+            runBtn.classList.remove('running');
+            runBtn.innerHTML = '<i class="fa-solid fa-check"></i> Chạy lại';
+        }, 3000);
     }
 
     function appendConsoleLog(parent, text, color) {
@@ -565,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logLine.textContent = text;
         parent.appendChild(logLine);
 
-        const consoleContainer = document.querySelector('.interactive-console');
+        const consoleContainer = parent.closest('.interactive-console');
         if (consoleContainer) consoleContainer.scrollTop = consoleContainer.scrollHeight;
     }
 
@@ -689,6 +712,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (e.target.closest('button, a, input, .btn-console-run, .overview-modal')) return;
                 nextSlide();
             });
+        }
+
+        // Add run listener for Slide 8 Console button
+        if (runConsoleBtnSlide8) {
+            runConsoleBtnSlide8.addEventListener('click', runSlide8Console);
         }
     }
 
