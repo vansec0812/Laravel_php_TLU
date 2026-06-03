@@ -697,16 +697,16 @@ body {
 
 /* Typography styles inside slide */
 .slide-lead {
-    font-size: 26px;
-    line-height: 1.6;
+    font-size: 21px;
+    line-height: 1.5;
     color: var(--text-main);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     font-weight: normal;
 }
 
 /* Slide 5 intro paragraph — slightly smaller */
 .slide-lead.font-medium {
-    font-size: 21px;
+    font-size: 18px;
 }
 
 /* Slide 1 lead paragraph — slightly smaller */
@@ -1178,7 +1178,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 23px;
+    font-size: 19px;
     line-height: 1.4;
 }
 
@@ -1239,13 +1239,13 @@ body {
 }
 
 .val-text strong {
-    font-size: 28px;
+    font-size: 21px;
     color: var(--accent-red);
     font-weight: 700;
 }
 
 .val-text span {
-    font-size: 22px;
+    font-size: 17px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1284,13 +1284,13 @@ body {
 }
 
 .threat-card h4 {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--accent-red);
 }
 
 .threat-card p {
-    font-size: 18px;
+    font-size: 15px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1354,13 +1354,13 @@ body {
 }
 
 .showcase-text strong {
-    font-size: 22px;
+    font-size: 18px;
     color: var(--accent-red);
     font-weight: 700;
 }
 
 .showcase-text span {
-    font-size: 18px;
+    font-size: 15px;
     color: var(--text-main);
 }
 
@@ -1392,7 +1392,7 @@ body {
 }
 
 .solution-focus h3 {
-    font-size: 22px;
+    font-size: 19px;
     font-weight: 700;
     line-height: 1.4;
     margin-top: 6px;
@@ -1423,14 +1423,14 @@ body {
 }
 
 .solution-list li strong {
-    font-size: 22px;
+    font-size: 18px;
     color: var(--accent-red);
     display: block;
     margin-bottom: 2px;
 }
 
 .solution-list li span {
-    font-size: 19px;
+    font-size: 16px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1463,14 +1463,14 @@ body {
 }
 
 .action-card h5 {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
     margin-bottom: 4px;
     color: var(--accent-red);
 }
 
 .action-card p {
-    font-size: 18px;
+    font-size: 15px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1504,14 +1504,14 @@ body {
 }
 
 .immune-pillar h5 {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
     margin-bottom: 8px;
     color: var(--accent-red);
 }
 
 .immune-pillar p {
-    font-size: 18px;
+    font-size: 15px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -2221,16 +2221,16 @@ body.full-screen-active .app-header {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
     height: 100%;
     width: 100%;
-    padding: 16px;
+    padding: 12px 12px 80px 12px;
     box-sizing: border-box;
     background: #000000;
 }
 .left-grid-images-slide6 .slide6-img-card {
     position: relative;
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
     height: 100%;
     border: 2px solid rgba(255, 215, 0, 0.25);
@@ -2246,14 +2246,15 @@ body.full-screen-active .app-header {
     transform: scale(1.06);
 }
 
-/* Slide 8 Digitized Heritage Collage */
+/* Slide 8 Digitized Heritage 2x2 Collage */
 .image-collage-slide8 {
     display: grid;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
     height: 100%;
     width: 100%;
-    padding: 16px;
+    padding: 14px;
     box-sizing: border-box;
     background: #000000;
 }
@@ -2261,7 +2262,7 @@ body.full-screen-active .app-header {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 8px;
     border: 2px solid rgba(255, 215, 0, 0.25);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
