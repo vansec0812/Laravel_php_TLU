@@ -69,15 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             title: "Thế hệ trẻ & Sự thức tỉnh",
-            text: `<p>Nhưng chúng ta tin tưởng rằng, thế hệ trẻ Việt Nam không hề quay lưng với truyền thống. Ngược lại, họ đang tiếp cận văn hóa bằng ngôn ngữ hiện đại.</p>
-                   <p>Ta tự hào nhìn thấy hàng triệu người trẻ xúc động hướng về Tổ quốc trong các sự kiện quốc gia lớn như Đại lễ A80, hát vang khúc ca tự hào tại các concert âm nhạc, hay lặng đi đầy xúc động trước vở kịch cách mạng “Mưa đỏ”. Bản sắc dân tộc chưa bao giờ nguội tắt.</p>`,
-            note: "Nói bằng giọng xúc động, sau đó hào hùng khi lấy dẫn chứng về các sự kiện thanh niên yêu nước."
+            text: `<p>Nhưng chúng ta tin tưởng rằng, thế hệ trẻ Việt Nam không hề quay lưng với truyền thống. Ngược lại, họ đang tiếp cận văn hóa bằng ngôn ngữ và công cụ của thời đại mới.</p>
+                   <p>Họ tự hào tham gia những đoàn diễu hành rực rỡ sắc màu trang phục của 54 dân tộc, kiêu hãnh giương cao lá cờ Tổ quốc. Họ xúc động nghẹn ngào trước những tấm gương liệt sỹ trong vở kịch "Mưa đỏ". Và đặc biệt, họ đang sử dụng công nghệ số để phục dựng di ảnh của thế hệ cha anh đi trước, kết nối quá khứ anh hùng với hiện tại.</p>`,
+            note: "Nói bằng giọng xúc động, sau đó tự hào khi lấy dẫn chứng về các hành động tri ân bằng công nghệ của người trẻ."
         },
         {
             title: "Giải pháp 1: Đại sứ văn hóa số",
             text: `<p>Để phát huy vai trò chủ thể của Nhân dân, giải pháp đầu tiên là xây dựng lực lượng <strong>“Đại sứ văn hóa số”</strong>.</p>
                    <p>Mỗi người dân, đặc biệt là học sinh sinh viên công nghệ, hãy chủ động sáng tạo nội dung, đưa lịch sử, ẩm thực, phong tục Việt Nam lên không gian số. Chiến dịch “Tự hào người Việt Nam” trực tuyến sẽ tạo làn sóng lan tỏa mạnh mẽ.</p>`,
-            note: "Giọng thuyết phục, kêu gọi hành động. Nhấn nút tiếp theo (Next) hoặc nhấp chuột để bắt đầu chạy mô phỏng mã nguồn đại sứ số trên màn hình."
+            note: "Giọng thuyết phục, kêu gọi hành động. Chỉ tay về phía hình ảnh đại sứ văn hóa số trên màn hình."
         },
         {
             title: "Giải pháp 2: Kinh tế hóa văn hóa & Nghị quyết 80",
@@ -144,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // INITIALIZATION
     // ==========================================================================
     function init() {
+        createBlurredBackgrounds();
         createIndicators();
         updateSlideDisplay();
         createParticles();
@@ -153,6 +154,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Reveal all items on the initial slide immediately
         revealAll(slides[currentSlide]);
+    }
+
+    function createBlurredBackgrounds() {
+        document.querySelectorAll('.image-wrapper img.image-main').forEach(img => {
+            const wrapper = img.parentElement;
+            if (wrapper) {
+                const blurBg = document.createElement('div');
+                blurBg.className = 'image-blur-bg';
+                blurBg.style.backgroundImage = `url('${img.src}')`;
+                wrapper.insertBefore(blurBg, img);
+            }
+        });
     }
 
     // ==========================================================================
@@ -221,6 +234,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentSlide === 1) {
             animateNumberCounter();
         }
+
+        // Toggle full screen layout on Slide 11
+        if (currentSlide === 11) {
+            document.body.classList.add('full-screen-active');
+            const container = document.querySelector('.presentation-container');
+            if (container) container.classList.add('full-screen-active');
+        } else {
+            document.body.classList.remove('full-screen-active');
+            const container = document.querySelector('.presentation-container');
+            if (container) container.classList.remove('full-screen-active');
+        }
     }
 
     // ==========================================================================
@@ -236,19 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function goToSlide(index) {
         if (index >= 0 && index < totalSlides) {
             currentSlide = index;
-
-            // Reset slide 8 console state if we go to Slide 8
-            if (currentSlide === 7) {
-                slide8CodeRunStatus = 'idle';
-                const runBtn = document.getElementById('run-console-btn-slide8');
-                const body = document.getElementById('slide8-console-body');
-                if (runBtn && body) {
-                    runBtn.classList.remove('running');
-                    runBtn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="display:inline-block; vertical-align:middle; margin-right:4px;"><path d="M8 5v14l11-7z" /></svg> Chạy thử';
-                    const prevOutput = body.querySelectorAll('.console-output');
-                    prevOutput.forEach(el => el.remove());
-                }
-            }
 
             updateSlideDisplay();
 
@@ -267,12 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function nextSlide() {
-        // If we are on Slide 8 (0-indexed 7) and code console hasn't run yet
-        if (currentSlide === 7 && slide8CodeRunStatus === 'idle') {
-            runSlide8Console();
-            return;
-        }
-
         // Advance to next slide directly (no click-to-reveal)
         if (currentSlide < totalSlides - 1) {
             goToSlide(currentSlide + 1);

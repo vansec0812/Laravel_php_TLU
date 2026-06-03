@@ -253,8 +253,20 @@ body {
     animation: sweepLine 0.6s cubic-bezier(0.4, 0, 0.6, 1) forwards;
 }
 
+
+
 .image-blur-bg {
-    display: none;
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px) brightness(0.4);
+    opacity: 0.85;
+    z-index: 1;
+    animation: kenburnsBackground 30s ease infinite alternate;
 }
 
 @keyframes kenburnsBackground {
@@ -685,7 +697,7 @@ body {
 
 /* Typography styles inside slide */
 .slide-lead {
-    font-size: 23px;
+    font-size: 26px;
     line-height: 1.6;
     color: var(--text-main);
     margin-bottom: 20px;
@@ -1106,7 +1118,7 @@ body {
 }
 
 .president-quote {
-    font-size: 23px;
+    font-size: 26px;
     line-height: 1.5;
     font-style: italic;
     color: var(--accent-red);
@@ -1166,7 +1178,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 20px;
+    font-size: 23px;
     line-height: 1.4;
 }
 
@@ -1227,13 +1239,13 @@ body {
 }
 
 .val-text strong {
-    font-size: 21px;
+    font-size: 28px;
     color: var(--accent-red);
     font-weight: 700;
 }
 
 .val-text span {
-    font-size: 17px;
+    font-size: 22px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1272,13 +1284,13 @@ body {
 }
 
 .threat-card h4 {
-    font-size: 19px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--accent-red);
 }
 
 .threat-card p {
-    font-size: 16px;
+    font-size: 18px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1342,13 +1354,13 @@ body {
 }
 
 .showcase-text strong {
-    font-size: 19px;
+    font-size: 22px;
     color: var(--accent-red);
     font-weight: 700;
 }
 
 .showcase-text span {
-    font-size: 16px;
+    font-size: 18px;
     color: var(--text-main);
 }
 
@@ -1411,14 +1423,14 @@ body {
 }
 
 .solution-list li strong {
-    font-size: 19px;
+    font-size: 22px;
     color: var(--accent-red);
     display: block;
     margin-bottom: 2px;
 }
 
 .solution-list li span {
-    font-size: 17px;
+    font-size: 19px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1451,14 +1463,14 @@ body {
 }
 
 .action-card h5 {
-    font-size: 19px;
+    font-size: 22px;
     font-weight: 700;
     margin-bottom: 4px;
     color: var(--accent-red);
 }
 
 .action-card p {
-    font-size: 16px;
+    font-size: 18px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1492,14 +1504,14 @@ body {
 }
 
 .immune-pillar h5 {
-    font-size: 19px;
+    font-size: 22px;
     font-weight: 700;
     margin-bottom: 8px;
     color: var(--accent-red);
 }
 
 .immune-pillar p {
-    font-size: 16px;
+    font-size: 18px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -1521,7 +1533,7 @@ body {
 }
 
 .huge-slogan h3 {
-    font-size: 30px;
+    font-size: 36px;
     font-weight: 800;
     letter-spacing: 0.5px;
     color: var(--accent-red);
@@ -1545,7 +1557,7 @@ body {
 }
 
 .pledge-text {
-    font-size: 18px;
+    font-size: 21px;
     line-height: 1.5;
     color: var(--text-main);
     font-weight: 700;
@@ -1572,12 +1584,12 @@ body {
 
 .mini-card strong {
     color: var(--text-main);
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
 }
 
 .mini-card span {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--text-main);
 }
@@ -1587,7 +1599,7 @@ body {
 }
 
 .slogan-bold {
-    font-size: 20px;
+    font-size: 23px;
     font-weight: 800;
     letter-spacing: 2px;
     margin-bottom: 6px;
@@ -1914,7 +1926,7 @@ body {
 }
 
 .thank-you-subtitle {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--text-muted);
     margin-bottom: 40px;
@@ -2074,7 +2086,7 @@ body {
 }
 
 .solution-list li div strong {
-    font-size: 16px;
+    font-size: 19px;
     color: var(--accent-red);
     font-weight: 700;
     display: block;
@@ -2082,7 +2094,7 @@ body {
 }
 
 .solution-list li div span {
-    font-size: 14px;
+    font-size: 17px;
     color: var(--text-muted);
     line-height: 1.4;
 }
@@ -2112,15 +2124,144 @@ body {
         opacity: 1;
     }
 }
-
-/* Slide 8 Console Scaling Overrides */
-#slide8-console .console-body {
-    font-size: 18px;
-    line-height: 1.6;
-    padding: 24px;
+/* ==========================================================================
+   NEW COLLAGE & IMAGE GRID CUSTOM CLASSES
+   ========================================================================== */
+.image-collage-slide4 {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    background: #000000;
+}
+.collage-img-left {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 215, 0, 0.35);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.collage-right-col {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+    height: 100%;
+}
+.collage-img-right-1, .collage-img-right-2 {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
-#slide8-console .console-output {
-    font-size: 16px;
-    padding: 12px 24px;
+.grid-images-slide6 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    width: 100%;
+}
+.slide6-img-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border: 2px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+.slide6-img-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.slide6-img-card:hover img {
+    transform: scale(1.06);
+}
+.slide6-img-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    color: #ffffff;
+    font-size: 13px;
+    padding: 6px 12px;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    font-family: var(--font-primary);
+}
+
+/* Fullscreen mode formatting */
+body.full-screen-active .app-header {
+    display: none !important;
+}
+.presentation-container.full-screen-active .content-stage {
+    display: none !important;
+}
+.presentation-container.full-screen-active .visual-stage {
+    flex: 1 !important;
+}
+.presentation-container.full-screen-active .image-wrapper[data-slide="11"] .image-main {
+    object-fit: cover !important;
+}
+.presentation-container.full-screen-active .image-wrapper[data-slide="11"] .image-label {
+    display: none !important;
+}
+
+/* Slide 6 Left Side 2x2 Image Grid */
+.left-grid-images-slide6 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+    height: 100%;
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    background: #000000;
+}
+.left-grid-images-slide6 .slide6-img-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+    border: 2px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+.left-grid-images-slide6 .slide6-img-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.left-grid-images-slide6 .slide6-img-card:hover img {
+    transform: scale(1.06);
+}
+
+/* Slide 8 Digitized Heritage Collage */
+.image-collage-slide8 {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+    height: 100%;
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    background: #000000;
+}
+.image-collage-slide8 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
