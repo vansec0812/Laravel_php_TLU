@@ -2230,9 +2230,10 @@ body.full-screen-active .app-header {
     display: none !important;
 }
 
-/* Hide white vignette overlay on Slides 4 & 6 so images show clearly */
+/* Hide white vignette overlay on Slides 4, 6 & 11 so images show clearly */
 .image-wrapper[data-slide="4"] .overlay-vignette,
-.image-wrapper[data-slide="6"] .overlay-vignette {
+.image-wrapper[data-slide="6"] .overlay-vignette,
+.image-wrapper[data-slide="11"] .overlay-vignette {
     display: none !important;
 }
 
